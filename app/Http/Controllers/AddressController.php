@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Island;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -11,47 +10,47 @@ class AddressController extends Controller
     // List all addresses
     public function index()
     {
-        return Address::with('island')->get(); // Fetch all addresses along with related island data
+        $addresses = Address::with('island')->get();
+        return response()->json(['message' => 'Addresses retrieved successfully.', 'addresses' => $addresses], 200);
     }
 
     // Show a single address
     public function show(Address $address)
     {
-        return $address->load('island'); // Show a specific address and include its related island
+        $address = $address->load('island');
+        return response()->json(['message' => 'Address retrieved successfully.', 'address' => $address], 200);
     }
 
     // Create a new address
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'street' => 'required|string|max:255', // Street validation
-            'city' => 'required|string|max:255', // City validation
-            'state' => 'required|string|max:255', // State validation
-            'island_id' => 'required|exists:islands,id', // Ensure the island exists
+            'street' => 'required|string|max:255',
+            'house' => 'required|string|max:255',
+            'island_id' => 'required|exists:islands,id',
         ]);
 
-        $address = Address::create($validated); // Create a new address with validated data
-        return response()->json($address, 201); // Return the newly created address with a 201 status code
+        $address = Address::create($validated);
+        return response()->json(['message' => 'Address created successfully.', 'address' => $address], 201);
     }
 
     // Update an existing address
     public function update(Request $request, Address $address)
     {
         $validated = $request->validate([
-            'street' => 'sometimes|string|max:255', // Optional update for street
-            'city' => 'sometimes|string|max:255', // Optional update for city
-            'state' => 'sometimes|string|max:255', // Optional update for state
-            'island_id' => 'sometimes|exists:islands,id', // Optional update for island_id
+            'street' => 'sometimes|string|max:255',
+            'house' => 'sometimes|string|max:255',
+            'island_id' => 'sometimes|exists:islands,id',
         ]);
 
-        $address->update($validated); // Update the address with validated data
-        return response()->json($address); // Return the updated address
+        $address->update($validated);
+        return response()->json(['message' => 'Address updated successfully.', 'address' => $address], 200);
     }
 
     // Delete an address
     public function destroy(Address $address)
     {
-        $address->delete(); // Delete the address
-        return response()->noContent(); // Return no content status (204) after successful deletion
+        $address->delete();
+        return response()->json(['message' => 'Address deleted successfully.'], 200);
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $fillable = ['street', 'city', 'state', 'island_id']; // Allow mass assignment for these fields
+    protected $fillable = ['street', 'house','island_id']; // Allow mass assignment for these fields
 
     public function island()
     {

@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('addresses', function (Blueprint $table) {
-            $table->id(); // Unique identifier for each address
-            $table->string('street'); // Street address
-            $table->string('city'); // City name
-            $table->string('state'); // State name
-            $table->foreignId('island_id')->constrained()->onDelete('cascade'); // Linking to the islands table
-            $table->timestamps(); // Created at and updated at
+            $table->id(); // Primary Key
+            $table->string('street'); // Street name
+            $table->string('house'); // house name
+            $table->foreignId('island_id')->constrained()->onDelete('cascade'); // Foreign Key to islands
+            $table->timestamps(); // Created at and Updated at fields
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('addresses');
     }
 };
